@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en" class="h-full bg-gray-50">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JWT Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/10.9.0/jsrsasign-all-min.js"></script>
+    <script
+      src="https://unpkg.com/alpinejs@3.13.5/dist/cdn.min.js"
+      defer
+    ></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="h-full"
+    x-data="{
+    providers: [],
+    selectedProvider: '',
+    baseUrl: window.location,
+    subject: 'default-subject',
+    audience: 'https://api.example.com',
+    expiration: 86400,
+    claims: '',
+    result: null,
+    error: null,
+    loading: false,
+    summaryLoading: true,
+    copied: false,
+
+    async init() {
+        try {
+            const response = await fetch(`${this.baseUrl}providers-summary.json`);
+            if (!response.ok) throw new Error('Failed to load providers');
+            const data = await response.json();
+            this.providers = data.providers;
+        } catch (error) {
+            this.error = `Failed to load providers: ${error.message}`;
+        } finally {
+            this.summaryLoading = false;
+        }
+    },
+
+    async generateJWT() {
+        if (!this.selectedProvider) {
+            this.error = 'Please select a provider';
+            return;
+        }
+
+        this.loading = true;
+        this.error = null;
+        this.result = null;
+
+        try {
+            const keyData = await this.fetchPrivateKeyData();
+            const claims = this.prepareJWTClaims(keyData.issuer);
+            const token = this.signJWT(keyData, claims);
+            this.result = this.formatJWT(token, claims);
+        } catch (error) {
+            this.error = error.message;
+        } finally {
+            this.loading = false;
+        }
+    },
+
+    async fetchPrivateKeyData() {
+        try {
+            const response = await fetch(`${this.baseUrl}${this.selectedProvider}/private-keys`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return await response.json();
+        } catch (error) {
+            throw new Error(`Failed to fetch private key data: ${error.message}`);
+        }
+    },
+
+    prepareJWTClaims(issuer) {
+        const now = Math.floor(Date.now() / 1000);
+        const claims = {
+            iss: issuer,
+            sub: this.subject || 'default-subject',
+            aud: this.audience || 'https://api.example.com',
+            iat: now,
+            exp: now + (parseInt(this.expiration) || 86400)
+        };
+
+        if (this.claims) {
+            try {
+                const additionalClaims = JSON.parse(this.claims);
+                Object.assign(claims, additionalClaims);
+            } catch (e) {
+                throw new Error('Invalid JSON in additional claims');
+            }
+        }
+
+        return claims;
+    },
+
+    signJWT(keyData, claims) {
+        const header = {
+            alg: 'RS256',
+            typ: 'JWT',
+            kid: keyData.kid
+        };
+
+        return KJUR.jws.JWS.sign(
+            'RS256',
+            JSON.stringify(header),
+            JSON.stringify(claims),
+            keyData.private_key_pem
+        );
+    },
+
+    formatJWT(token, claims) {
+        return {
+            jwt: token,
+            claims: claims
+        };
+    },
+    async copyToClipboard() {
+        await navigator.clipboard.writeText(this.result.jwt);
+        this.copied = true;
+        setTimeout(() => this.copied = false, 2000);
+    },
+    generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    },
+    generateRandomString(length = 10) {
+      return Math.random().toString(36).substring(2, length + 2);
+    },
+    templates: {
+      'empty': '',
+      'circleci': function() {
+        const orgId = this.generateUUID();
+        const projectId = this.generateUUID();
+        const contextId = this.generateUUID();
+        return {
+          iss: `https://oidc.circleci.com/org/${orgId}`,
+          aud: orgId,
+          'oidc.circleci.com/project-id': projectId,
+          'oidc.circleci.com/vcs-origin': 'github.com/org-name/repo-name',
+          'oidc.circleci.com/vcs-ref': 'refs/heads/main',
+          'oidc.circleci.com/context-ids': [contextId],
+          'oidc.circleci.com/ssh-rerun': false
+        };
+      },
+      'github': function() {
+        return {
+          iss: 'https://token.actions.githubusercontent.com',
+          aud: 'https://github.com/octo-org',
+          repository: 'octo-org/octo-repo',
+          repository_owner: 'octo-org',
+          repository_visibility: 'private',
+          repository_id: Math.floor(Math.random() * 100000).toString(),
+          repository_owner_id: Math.floor(Math.random() * 100000).toString(),
+          actor_id: Math.floor(Math.random() * 100000).toString(),
+          actor: 'octocat',
+          run_id: this.generateRandomString(8),
+          run_number: Math.floor(Math.random() * 1000).toString(),
+          run_attempt: '1',
+          runner_environment: 'github-hosted',
+          workflow: 'example-workflow',
+          job_workflow_ref: 'octo-org/octo-repo/.github/workflows/oidc.yml@refs/heads/main',
+          environment: 'prod',
+          ref: 'refs/heads/main',
+          sha: Array(40).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('')
+        };
+      },
+      'azure': function() {
+        const tenantId = this.generateUUID();
+        const userName = `user${this.generateRandomString(6)}`;
+        return {
+          iss: `https://login.microsoftonline.com/${tenantId}/v2.0`,
+          aud: this.generateUUID(),
+          acrs: ['c1'],
+          aio: this.generateRandomString(32),
+          amr: ['pwd', 'mfa'],
+          preferred_username: `${userName}@contoso.com`,
+          name: userName,
+          scp: 'User.Read Mail.Read',
+          roles: ['User.Read.All', 'Mail.Read'],
+          wids: [this.generateUUID(), this.generateUUID()],
+          groups: [this.generateUUID(), this.generateUUID()],
+          hasgroups: true,
+          xms_cc: ['CP1']
+        };
+      },
+      'google': function() {
+        const clientId = `${this.generateRandomString(8)}.apps.googleusercontent.com`;
+        return {
+          iss: 'https://accounts.google.com',
+          aud: clientId,
+          hd: 'example.com',
+          email: `user${this.generateRandomString(6)}@example.com`,
+          email_verified: true
+        };
+      },
+      'kubernetes': function() {
+        const namespace = `namespace-${this.generateRandomString(6)}`;
+        const serviceAccount = `sa-${this.generateRandomString(6)}`;
+        return {
+          iss: 'kubernetes/serviceaccount',
+          aud: ['https://kubernetes.default.svc'],
+          kubernetes: {
+            namespace: namespace,
+            serviceaccount: {
+              name: serviceAccount,
+              uid: this.generateUUID()
+            },
+            pod: {
+              name: `pod-${this.generateRandomString(8)}`,
+              uid: this.generateUUID()
+            }
+          }
+        };
+      }
+    },
+    loadTemplate(templateName) {
+      if (templateName === 'empty') {
+        this.claims = '';
+        return;
+      }
+      const template = this.templates[templateName].call(this);
+      this.claims = JSON.stringify(template, null, 2);
+    }
+}"
+  >
+    <div class="min-h-full">
+      <div class="bg-gray-800 pb-32">
+        <header class="py-10">
+          <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold tracking-tight text-white">
+              JWT Generator
+            </h1>
+            <p class="text-3l text-white">
+              This is super insecure, do not use these providers for anything
+              more than demonstration purposes; anyone can generate valid JWTs
+              from this page, the private keys have not been kept private.
+            </p>
+          </div>
+        </header>
+      </div>
+
+      <main class="-mt-32">
+        <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
+          <div class="rounded-lg bg-white px-6 py-6 shadow sm:px-8">
+            <div class="space-y-6">
+              <!-- Provider Selection -->
+              <div>
+                <label
+                  for="provider"
+                  class="block text-sm font-medium text-gray-700"
+                  >Provider</label
+                >
+                <div class="mt-1 relative">
+                  <select
+                    x-model="selectedProvider"
+                    :disabled="summaryLoading"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option value="">Select a provider</option>
+                    <template
+                      x-for="provider in providers"
+                      :key="provider.prefix"
+                    >
+                      <option
+                        :value="provider.prefix"
+                        x-text="provider.prefix"
+                      ></option>
+                    </template>
+                  </select>
+                  <div
+                    x-show="summaryLoading"
+                    class="absolute right-0 top-0 bottom-0 flex items-center pr-3"
+                  >
+                    <svg
+                      class="animate-spin h-5 w-5 text-gray-400"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        class="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="4"
+                      ></circle>
+                      <path
+                        class="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Base URL (read-only) -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Base URL</label
+                >
+                <input
+                  type="text"
+                  x-model="baseUrl"
+                  readonly
+                  class="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm sm:text-sm"
+                />
+              </div>
+
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <!-- Subject -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Subject</label
+                  >
+                  <input
+                    type="text"
+                    x-model="subject"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+
+                <!-- Audience -->
+                <div>
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Audience</label
+                  >
+                  <input
+                    type="text"
+                    x-model="audience"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <!-- Expiration -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Expiration (seconds)
+                </label>
+                <input
+                  type="number"
+                  x-model="expiration"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+
+              <!-- Additional Claims -->
+              <!--                         <div>
+                            <label class="block text-sm font-medium text-gray-700">
+                                Additional Claims (JSON)
+                            </label>
+                            <textarea x-model="claims" rows="4"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-mono"
+                                placeholder='{"key": "value"}'></textarea>
+                        </div> -->
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  Choose OpenID Provider Template
+                </label>
+                <select
+                  x-on:change="loadTemplate($event.target.value)"
+                  class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                >
+                  <option value="empty">Select a provider...</option>
+                  <option value="circleci">CircleCI</option>
+                  <option value="github">GitHub Actions</option>
+                  <option value="azure">Azure AD</option>
+                  <option value="google">Google</option>
+                  <option value="kubernetes">Kubernetes ServiceAccount</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Additional Claims (JSON)
+                </label>
+                <textarea
+                  x-model="claims"
+                  rows="20"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-mono"
+                  placeholder='{"key": "value"}'
+                ></textarea>
+              </div>
+
+              <!-- Generate Button -->
+              <div>
+                <button
+                  @click="generateJWT"
+                  :disabled="loading || !selectedProvider"
+                  class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <span x-show="!loading">Generate JWT</span>
+                  <span x-show="loading">Generating...</span>
+                </button>
+              </div>
+
+              <!-- Error Message -->
+              <div x-show="error" x-cloak class="rounded-md bg-red-50 p-4">
+                <div class="flex">
+                  <div class="ml-3">
+                    <h3
+                      class="text-sm font-medium text-red-800"
+                      x-text="error"
+                    ></h3>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Result -->
+              <div x-show="result" x-cloak class="space-y-4">
+                <div class="rounded-md bg-gray-50 p-4">
+                  <pre
+                    class="text-sm font-mono whitespace-pre-wrap break-all"
+                    x-text="JSON.stringify(result, null, 2)"
+                  ></pre>
+                </div>
+                <button
+                  @click="copyToClipboard"
+                  class="inline-flex items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                >
+                  <span x-show="!copied">Copy JWT</span>
+                  <span x-show="copied">Copied!</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

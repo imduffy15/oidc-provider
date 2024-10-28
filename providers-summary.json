@@ -1,0 +1,145 @@
+{
+  "base_url": "https://imduffy15.github.io/oidc-provider",
+  "providers": [
+    {
+      "prefix": "29863bc7-a48f-42ac-b07e-b8e19611742f",
+      "issuer": "https://imduffy15.github.io/oidc-provider/29863bc7-a48f-42ac-b07e-b8e19611742f",
+      "config_path": "29863bc7-a48f-42ac-b07e-b8e19611742f/.well-known/openid-configuration",
+      "jwks_path": "29863bc7-a48f-42ac-b07e-b8e19611742f/jwks",
+      "private_keys_path": "29863bc7-a48f-42ac-b07e-b8e19611742f/private-keys"
+    },
+    {
+      "prefix": "3c51016c-3eec-42f4-b74d-c420a531b72f",
+      "issuer": "https://imduffy15.github.io/oidc-provider/3c51016c-3eec-42f4-b74d-c420a531b72f",
+      "config_path": "3c51016c-3eec-42f4-b74d-c420a531b72f/.well-known/openid-configuration",
+      "jwks_path": "3c51016c-3eec-42f4-b74d-c420a531b72f/jwks",
+      "private_keys_path": "3c51016c-3eec-42f4-b74d-c420a531b72f/private-keys"
+    },
+    {
+      "prefix": "81b6f885-2a6b-42bb-bdc7-efd26ce6657a",
+      "issuer": "https://imduffy15.github.io/oidc-provider/81b6f885-2a6b-42bb-bdc7-efd26ce6657a",
+      "config_path": "81b6f885-2a6b-42bb-bdc7-efd26ce6657a/.well-known/openid-configuration",
+      "jwks_path": "81b6f885-2a6b-42bb-bdc7-efd26ce6657a/jwks",
+      "private_keys_path": "81b6f885-2a6b-42bb-bdc7-efd26ce6657a/private-keys"
+    },
+    {
+      "prefix": "9084fed5-fe81-4704-8597-5aab930bd19c",
+      "issuer": "https://imduffy15.github.io/oidc-provider/9084fed5-fe81-4704-8597-5aab930bd19c",
+      "config_path": "9084fed5-fe81-4704-8597-5aab930bd19c/.well-known/openid-configuration",
+      "jwks_path": "9084fed5-fe81-4704-8597-5aab930bd19c/jwks",
+      "private_keys_path": "9084fed5-fe81-4704-8597-5aab930bd19c/private-keys"
+    },
+    {
+      "prefix": "7cba5658-ba29-491b-9feb-0c9dd33bcf46",
+      "issuer": "https://imduffy15.github.io/oidc-provider/7cba5658-ba29-491b-9feb-0c9dd33bcf46",
+      "config_path": "7cba5658-ba29-491b-9feb-0c9dd33bcf46/.well-known/openid-configuration",
+      "jwks_path": "7cba5658-ba29-491b-9feb-0c9dd33bcf46/jwks",
+      "private_keys_path": "7cba5658-ba29-491b-9feb-0c9dd33bcf46/private-keys"
+    },
+    {
+      "prefix": "b45dac46-ecb1-40e0-ba83-af9cc07736c1",
+      "issuer": "https://imduffy15.github.io/oidc-provider/b45dac46-ecb1-40e0-ba83-af9cc07736c1",
+      "config_path": "b45dac46-ecb1-40e0-ba83-af9cc07736c1/.well-known/openid-configuration",
+      "jwks_path": "b45dac46-ecb1-40e0-ba83-af9cc07736c1/jwks",
+      "private_keys_path": "b45dac46-ecb1-40e0-ba83-af9cc07736c1/private-keys"
+    },
+    {
+      "prefix": "53ad7e1f-731f-42c0-8f66-7c39828c85ac",
+      "issuer": "https://imduffy15.github.io/oidc-provider/53ad7e1f-731f-42c0-8f66-7c39828c85ac",
+      "config_path": "53ad7e1f-731f-42c0-8f66-7c39828c85ac/.well-known/openid-configuration",
+      "jwks_path": "53ad7e1f-731f-42c0-8f66-7c39828c85ac/jwks",
+      "private_keys_path": "53ad7e1f-731f-42c0-8f66-7c39828c85ac/private-keys"
+    },
+    {
+      "prefix": "739fbc89-fd31-4a57-87be-b03ba1e26520",
+      "issuer": "https://imduffy15.github.io/oidc-provider/739fbc89-fd31-4a57-87be-b03ba1e26520",
+      "config_path": "739fbc89-fd31-4a57-87be-b03ba1e26520/.well-known/openid-configuration",
+      "jwks_path": "739fbc89-fd31-4a57-87be-b03ba1e26520/jwks",
+      "private_keys_path": "739fbc89-fd31-4a57-87be-b03ba1e26520/private-keys"
+    },
+    {
+      "prefix": "c61e4079-4921-4fc6-9f29-c75d6e09be86",
+      "issuer": "https://imduffy15.github.io/oidc-provider/c61e4079-4921-4fc6-9f29-c75d6e09be86",
+      "config_path": "c61e4079-4921-4fc6-9f29-c75d6e09be86/.well-known/openid-configuration",
+      "jwks_path": "c61e4079-4921-4fc6-9f29-c75d6e09be86/jwks",
+      "private_keys_path": "c61e4079-4921-4fc6-9f29-c75d6e09be86/private-keys"
+    },
+    {
+      "prefix": "31e379b2-ed97-44a3-8584-a7a9b08d0516",
+      "issuer": "https://imduffy15.github.io/oidc-provider/31e379b2-ed97-44a3-8584-a7a9b08d0516",
+      "config_path": "31e379b2-ed97-44a3-8584-a7a9b08d0516/.well-known/openid-configuration",
+      "jwks_path": "31e379b2-ed97-44a3-8584-a7a9b08d0516/jwks",
+      "private_keys_path": "31e379b2-ed97-44a3-8584-a7a9b08d0516/private-keys"
+    },
+    {
+      "prefix": "52f30c0d-aa8a-4f53-8805-e9574c5daa06",
+      "issuer": "https://imduffy15.github.io/oidc-provider/52f30c0d-aa8a-4f53-8805-e9574c5daa06",
+      "config_path": "52f30c0d-aa8a-4f53-8805-e9574c5daa06/.well-known/openid-configuration",
+      "jwks_path": "52f30c0d-aa8a-4f53-8805-e9574c5daa06/jwks",
+      "private_keys_path": "52f30c0d-aa8a-4f53-8805-e9574c5daa06/private-keys"
+    },
+    {
+      "prefix": "e06c1cd3-b5dc-4b82-972b-1d39b5b7a901",
+      "issuer": "https://imduffy15.github.io/oidc-provider/e06c1cd3-b5dc-4b82-972b-1d39b5b7a901",
+      "config_path": "e06c1cd3-b5dc-4b82-972b-1d39b5b7a901/.well-known/openid-configuration",
+      "jwks_path": "e06c1cd3-b5dc-4b82-972b-1d39b5b7a901/jwks",
+      "private_keys_path": "e06c1cd3-b5dc-4b82-972b-1d39b5b7a901/private-keys"
+    },
+    {
+      "prefix": "2b6c91c9-a0de-410d-b58f-67a7a1862dbd",
+      "issuer": "https://imduffy15.github.io/oidc-provider/2b6c91c9-a0de-410d-b58f-67a7a1862dbd",
+      "config_path": "2b6c91c9-a0de-410d-b58f-67a7a1862dbd/.well-known/openid-configuration",
+      "jwks_path": "2b6c91c9-a0de-410d-b58f-67a7a1862dbd/jwks",
+      "private_keys_path": "2b6c91c9-a0de-410d-b58f-67a7a1862dbd/private-keys"
+    },
+    {
+      "prefix": "99675738-b1ac-42e0-9d53-0d3c4807b640",
+      "issuer": "https://imduffy15.github.io/oidc-provider/99675738-b1ac-42e0-9d53-0d3c4807b640",
+      "config_path": "99675738-b1ac-42e0-9d53-0d3c4807b640/.well-known/openid-configuration",
+      "jwks_path": "99675738-b1ac-42e0-9d53-0d3c4807b640/jwks",
+      "private_keys_path": "99675738-b1ac-42e0-9d53-0d3c4807b640/private-keys"
+    },
+    {
+      "prefix": "4ec7b812-0f25-46f9-ba9b-1097004bfbfd",
+      "issuer": "https://imduffy15.github.io/oidc-provider/4ec7b812-0f25-46f9-ba9b-1097004bfbfd",
+      "config_path": "4ec7b812-0f25-46f9-ba9b-1097004bfbfd/.well-known/openid-configuration",
+      "jwks_path": "4ec7b812-0f25-46f9-ba9b-1097004bfbfd/jwks",
+      "private_keys_path": "4ec7b812-0f25-46f9-ba9b-1097004bfbfd/private-keys"
+    },
+    {
+      "prefix": "13518c18-1ab3-4cee-a80d-91a5e012e1a4",
+      "issuer": "https://imduffy15.github.io/oidc-provider/13518c18-1ab3-4cee-a80d-91a5e012e1a4",
+      "config_path": "13518c18-1ab3-4cee-a80d-91a5e012e1a4/.well-known/openid-configuration",
+      "jwks_path": "13518c18-1ab3-4cee-a80d-91a5e012e1a4/jwks",
+      "private_keys_path": "13518c18-1ab3-4cee-a80d-91a5e012e1a4/private-keys"
+    },
+    {
+      "prefix": "4d845488-e02e-482f-adb8-2e122f64117a",
+      "issuer": "https://imduffy15.github.io/oidc-provider/4d845488-e02e-482f-adb8-2e122f64117a",
+      "config_path": "4d845488-e02e-482f-adb8-2e122f64117a/.well-known/openid-configuration",
+      "jwks_path": "4d845488-e02e-482f-adb8-2e122f64117a/jwks",
+      "private_keys_path": "4d845488-e02e-482f-adb8-2e122f64117a/private-keys"
+    },
+    {
+      "prefix": "2469b44e-3017-4089-af50-cf3cfa690951",
+      "issuer": "https://imduffy15.github.io/oidc-provider/2469b44e-3017-4089-af50-cf3cfa690951",
+      "config_path": "2469b44e-3017-4089-af50-cf3cfa690951/.well-known/openid-configuration",
+      "jwks_path": "2469b44e-3017-4089-af50-cf3cfa690951/jwks",
+      "private_keys_path": "2469b44e-3017-4089-af50-cf3cfa690951/private-keys"
+    },
+    {
+      "prefix": "9b4e1bba-2d0b-43d2-8980-64e0f4469466",
+      "issuer": "https://imduffy15.github.io/oidc-provider/9b4e1bba-2d0b-43d2-8980-64e0f4469466",
+      "config_path": "9b4e1bba-2d0b-43d2-8980-64e0f4469466/.well-known/openid-configuration",
+      "jwks_path": "9b4e1bba-2d0b-43d2-8980-64e0f4469466/jwks",
+      "private_keys_path": "9b4e1bba-2d0b-43d2-8980-64e0f4469466/private-keys"
+    },
+    {
+      "prefix": "57ac555f-6080-4a7d-b547-d2a85781a8c0",
+      "issuer": "https://imduffy15.github.io/oidc-provider/57ac555f-6080-4a7d-b547-d2a85781a8c0",
+      "config_path": "57ac555f-6080-4a7d-b547-d2a85781a8c0/.well-known/openid-configuration",
+      "jwks_path": "57ac555f-6080-4a7d-b547-d2a85781a8c0/jwks",
+      "private_keys_path": "57ac555f-6080-4a7d-b547-d2a85781a8c0/private-keys"
+    }
+  ]
+}

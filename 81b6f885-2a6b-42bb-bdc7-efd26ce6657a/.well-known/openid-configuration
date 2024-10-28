@@ -1,0 +1,5 @@
+{
+  "issuer": "https://imduffy15.github.io/oidc-provider/81b6f885-2a6b-42bb-bdc7-efd26ce6657a",
+  "jwks_uri": "https://imduffy15.github.io/oidc-provider/81b6f885-2a6b-42bb-bdc7-efd26ce6657a/jwks",
+  "private_keys_uri": "https://imduffy15.github.io/oidc-provider/81b6f885-2a6b-42bb-bdc7-efd26ce6657a/private-keys"
+}
